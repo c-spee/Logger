@@ -15,9 +15,4 @@ steps:
     cd build/build-release
     make
   displayName: 'Compile target'
-- script: 
-    cmake -B build/build-release -DTARGET_TYPE=test
-    cd build/build-release
-    make
-  displayName: 'Compile test'
-     
+
