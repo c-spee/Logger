@@ -14,9 +14,11 @@ steps:
 - checkout: self
 - task: CMake@1
   inputs:
-    cmakeArgs: ..
+    cmakeArgs: '.. -DTARGET_TYPE=target'
+  displayName: 'cmake --build .'
+
 - task: CMake@1
   inputs:
-    cmakeArgs: '-DTARGET_TYPE=target'
-  displayName: 'Compile target'
+    cmakeArgs: '--build .'
+  displayName: 'cmake --build .'
 
