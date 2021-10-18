@@ -11,14 +11,24 @@ pool:
 
 steps:
 - script: |
-- checkout: self
+# - checkout: self
 - task: CMake@1
   inputs:
     cmakeArgs: '.. -DTARGET_TYPE=target'
-  displayName: 'cmake --build .'
+  displayName: 'cmake .. -DTARGET_TYPE=target'
 
 - task: CMake@1
   inputs:
     cmakeArgs: '--build .'
   displayName: 'cmake --build .'
 
+- task: CMake@1
+  inputs:
+    cmakeArgs: '.. -DTARGET_TYPE=test'
+  displayName: 'cmake .. -DTARGET_TYPE=test'
+
+- task: CMake@1
+  inputs:
+    cmakeArgs: '--build .'
+  displayName: 'cmake --build .'
+  
