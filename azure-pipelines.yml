@@ -12,6 +12,7 @@ pool:
 steps:
 - script: |
 - checkout: self
+- bash: cd ..
 - task: CMake@1
   inputs:
     cmakeArgs: '-DTARGET_TYPE=target'
