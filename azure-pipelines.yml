@@ -7,7 +7,7 @@ trigger:
 - main
 
 pool:
-  vmImage: cspirido-VirtualBox
+  name: cspirido-VirtualBox
 
 steps:
 - script: |
