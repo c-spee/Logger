@@ -11,6 +11,7 @@ pool:
 
 steps:
 - script: |
+- checkout: self
 - task: CMake@1
   inputs:
     cmakeArgs: '-DTARGET_TYPE=target'
