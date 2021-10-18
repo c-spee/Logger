@@ -32,3 +32,12 @@ steps:
     cmakeArgs: '--build .'
   displayName: 'cmake --build .'
   
+- task: CMake@1
+  displayName: 'Running GTest Unit Tests...'
+  inputs:
+    cmakeArgs: '-E chdir . UT_Logger'
+
+- task: CMake@1
+  displayName: 'Running Google Benchmarks...'
+  inputs:
+    cmakeArgs: '-E chdir . BM_Logger'
