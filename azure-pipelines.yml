@@ -35,7 +35,7 @@ steps:
 - task: CMake@1
   displayName: 'Running GTest Unit Tests...'
   inputs:
-    cmakeArgs: '-E ./UT_Logger'
+    cmakeArgs: '-E chdir . ./UT_Logger'
 
 - task: CMake@1
   displayName: 'Running Google Benchmarks...'
