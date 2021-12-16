@@ -41,3 +41,6 @@ steps:
   displayName: 'Running Google Benchmarks...'
   inputs:
     cmakeArgs: '-E chdir . ./BM_Logger'
+
+- task: RunCpptest@1
+  displayName: 'Running Parasoft SCA...'
