@@ -1,0 +1,46 @@
+# C/C++ with GCC
+# Build your C/C++ project with GCC using make.
+# Add steps that publish test results, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/c-cpp/gcc
+
+trigger:
+- main
+
+pool:
+  name: Default
+
+steps:
+- script: |
+# - checkout: self
+- task: CMake@1
+  inputs:
+    cmakeArgs: '.. -DTARGET_TYPE=target'
+  displayName: 'cmake .. -DTARGET_TYPE=target'
+
+- task: CMake@1
+  inputs:
+    cmakeArgs: '--build .'
+  displayName: 'cmake --build .'
+
+- task: CMake@1
+  inputs:
+    cmakeArgs: '.. -DTARGET_TYPE=test'
+  displayName: 'cmake .. -DTARGET_TYPE=test'
+
+- task: CMake@1
+  inputs:
+    cmakeArgs: '--build .'
+  displayName: 'cmake --build .'
+  
+- task: CMake@1
+  displayName: 'Running GTest Unit Tests...'
+  inputs:
+    cmakeArgs: '-E chdir . ./UT_Logger'
+
+- task: CMake@1
+  displayName: 'Running Google Benchmarks...'
+  inputs:
+    cmakeArgs: '-E chdir . ./BM_Logger'
+
+- task: RunCpptest@1
+  displayName: 'Running Parasoft SCA...'
