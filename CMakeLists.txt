@@ -10,7 +10,13 @@ if (TARGET_TYPE STREQUAL "target")
     add_executable(log
             main.cpp
             )
-    target_link_libraries(log logging)
+    add_executable(server
+            UDPServer.cpp)
+
+    target_link_libraries(log
+            logging
+            pthread
+            )
 
 elseif(TARGET_TYPE STREQUAL "test")
     add_subdirectory(logger)
@@ -44,6 +50,7 @@ elseif(TARGET_TYPE STREQUAL "test")
             BM_Logger
             benchmark
             logging
+            pthread
     )
 
     add_executable(
@@ -55,6 +62,7 @@ elseif(TARGET_TYPE STREQUAL "test")
             UT_Logger
             gtest_main
             logging
+            pthread
     )
 
 endif()

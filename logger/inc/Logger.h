@@ -2,92 +2,70 @@
 #ifndef LOGGER_LOGGER_H
 #define LOGGER_LOGGER_H
 
+#include <memory>
 #include <ostream>
-#include <iostream>
+#include <sstream>
 #include <utility>
-#include <strstream>
+
+#include "IOutput.h"
 
 extern const char* getProcessName();
-namespace logger
-{
-enum class Severity
-{
-    INFO,
-    DEBUG,
-    WARNING,
-    ERR
-};
+namespace logger {
+enum class Severity : uint8_t { info, debug, warning, error };
 
-class Log
-{
+class Logger final {
 private:
-    class Logger
-    {
+    class Log final {
     public:
-        Logger(const char* processName, Severity severity);
+        Log(const char* processName, std::string const& domainName, Severity sev,
+            const std::shared_ptr<IOutput>& output);
+        Log(Log const&) = delete;
+        Log& operator=(Log const&) = delete;
+        Log(Log&&) = delete;
+        Log& operator=(Log&&) = delete;
 
-        Logger(Logger const&) = delete;
-        Logger& operator=(Logger const&) = delete;
-
-//    Logger(Logger&& move) noexcept
-//            : name_(std::exchange(move.name_, nullptr))
-//    {
-//        std::cout << __PRETTY_FUNCTION__ << " ---------- move" << std::endl;
-//    }
-//
-//    Logger& operator=(Logger&& move) noexcept
-//    {
-//        name_ = std::exchange(move.name_, nullptr);
-//        std::cout << __PRETTY_FUNCTION__ << " ---------- move" << std::endl;
-//        return *this;
-//    }
-
-        template <typename T>
-        Logger& operator<<(const T& value)
-        {
-            strStream << value;
+        template <typename T> Log& operator<<(const T& value) {
+            m_strStream << value;
             return *this;
         }
 
-        Logger& operator<<(std::ostream& (*pf) (std::ostream&));
+        Log& operator<<(std::ostream& (*pf)(std::ostream&));
 
-        ~Logger();
+        ~Log() noexcept;
 
     private:
-        static constexpr int bufferSize = 256;
-        const char* name_;
-        Severity severity_;
-        std::strstream strStream;
-        char streamBuffer[bufferSize];
+        const char* m_name;
+        Severity m_severity;
+        std::stringstream m_strStream;
+        const std::shared_ptr<IOutput>& m_output;
 
-        const char* getSeverityToString();
+        const char* getSeverityToString() const noexcept;
     };
 
 public:
-    Log()
+    Logger(std::string const& domainName, const std::shared_ptr<IOutput>& output)
+        : m_processName(getProcessName())
+        , m_output(output)
+        , m_domainName(domainName)
     {
-        processName_ = getProcessName();
     }
 
-    Logger operator<<(const Severity svt)
-    {
-        if(NULL == processName_)
-            processName_ = "..";
-        return {processName_, svt};
-    }
+    Log operator<<(const Severity svt);
+
 private:
-    const char* processName_;
+    const char* m_processName;
+    std::shared_ptr<IOutput> m_output;
+    std::string m_domainName;
 };
 
-}
-
-namespace
-{
-    auto info = logger::Severity::INFO;
-    auto warning = logger::Severity::WARNING;
-    auto err = logger::Severity::ERR;
-    auto debug = logger::Severity::DEBUG;
-}
+} // namespace logger
 
 
-#endif //LOGGER_LOGGER_H
+namespace {
+auto info = logger::Severity::info;       // NOLINT
+auto warning = logger::Severity::warning; // NOLINT
+auto err = logger::Severity::error;         // NOLINT
+auto debug = logger::Severity::debug;     // NOLINT
+} // namespace
+
+#endif // LOGGER_LOGGER_H
