@@ -6,8 +6,9 @@
 #include <iostream>
 #include <memory.h>
 #include <Logger.h>
+#include <ConsoleOutput.h>
 
-//unsigned long Increment(unsigned long n) {
+// unsigned long Increment(unsigned long n) {
 //  unsigned long sum = 0;
 //  for(unsigned long i = 0; i < n; ++i) {
 //    benchmark::DoNotOptimize(sum++); // force to store memory in either memory or register
@@ -42,7 +43,8 @@ const char* getProcessName()
 
 void LogLikeHell(unsigned long times)
 {
-    logger::Log log;
+    auto output =  std::make_shared<logger::ConsoleOutput<>>();
+    logger::Logger log("DOMAIN", output);
     for(unsigned long i = 0; i < times; ++i)
     {
         benchmark::DoNotOptimize(log << info << "Log like hell " << i+(i%100));

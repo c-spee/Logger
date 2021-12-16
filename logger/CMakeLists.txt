@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.20)
 project(logger)
 
-include(/home/cspirido/parasoft_eclipse/cpptest/integration/cmake/cpptest-project.cmake)
+include(/home/cspirido/parasoft/cpptest/10.5/integration/cmake/cmake/cpptest.cmake)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_EXE_LINKER_FLAGS "-pthread")
